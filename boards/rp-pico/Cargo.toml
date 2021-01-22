@@ -1,5 +1,6 @@
 [package]
 name = "rp-pico"
+description = "Board support package for the Raspberry Pi Pico"
 version = "0.1.0"
 authors = ["Jan Niehusmann <jan@gondor.com>"]
 license = "MIT OR Apache-2.0"
