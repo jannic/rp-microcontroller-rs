@@ -24,8 +24,11 @@ The goal is to first get a working firmware which can be
 uploaded to the Raspberry Pi Pico, and then implement the
 [embedded-hal](https://crates.io/crates/embedded-hal) interface.
 
-For now, a simple blinky example can be compiled, but probably doesn't
-work yet, as it does not yet include the stage-2 boot code.
+For now, a simple blinky example can be compiled.
+It is completely untested, as I do not yet have access to the hardware.
+
+A TODO list can be found in the
+[wiki](https://github.com/jannic/rp-microcontroller-rs/wiki).
 
 ## Usage
 
