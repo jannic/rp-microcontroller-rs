@@ -5,8 +5,8 @@ This is a board support package for the
 
 ## Current state / TODO
 
-For now, a simple blinky example can be compiled, but probably doesn't
-work yet, as it does not yet include the stage-2 boot code.
+For now, a simple blinky example can be compiled.
+It is completely untested, as I do not yet have access to the hardware.
 
 ## Usage
 
@@ -18,6 +18,11 @@ cargo build --target thumbv6m-none-eabi --example=blink  --release
 
 ## License
 
-This package is licensed under the terms of both the
+The stage2 boot loader code in src/bs2_default_padded_checksummed.S was compiled
+from the [pico-sdk](https://github.com/raspberrypi/pico-sdk).
+It is Copyright 2020 (c) 2020 Raspberry Pi (Trading) Ltd. and is licensed
+under the [BSD-3-Clause License](LICENSE-Raspberry-Pi).
+
+The rest of this repository is licensed under the terms of both the
 [MIT license](LICENSE-MIT) and the [Apache License (Version 2.0)](LICENSE-APACHE), at your option.
 

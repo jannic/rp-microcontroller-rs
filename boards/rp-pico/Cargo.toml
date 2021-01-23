@@ -1,9 +1,9 @@
 [package]
 name = "rp-pico"
 description = "Board support package for the Raspberry Pi Pico"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Jan Niehusmann <jan@gondor.com>"]
-license = "MIT OR Apache-2.0"
+license = "BSD-3-Clause AND MIT OR BSD-3-Clause AND Apache-2.0"
 edition = "2018"
 readme = "README.md"
 repository = "https://github.com/jannic/rp-microcontroller-rs/"
@@ -17,6 +17,7 @@ vcell = "0.1.0"
 [dependencies.cortex-m-rt]
 optional = true
 version = "0.6.13"
+features = ["device"]
 
 [dependencies.rp-hal]
 path = "../../hal"
@@ -36,3 +37,6 @@ path = "../../hal"
 version = "0.0.1"
 default-features = false
 features = ["2040"]
+
+[build-dependencies]
+cc = { version = "1.0", features = ["parallel"] }

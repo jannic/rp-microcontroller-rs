@@ -7,6 +7,8 @@ extern crate panic_halt;
 
 use cortex_m_rt::entry;
 
+extern crate rp_pico;
+
 #[entry]
 fn main() -> ! {
     let pin = 25;
@@ -47,3 +49,4 @@ fn main() -> ! {
     }
 
 }
+
