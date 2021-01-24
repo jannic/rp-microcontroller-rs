@@ -15,6 +15,15 @@ fn main() -> ! {
     // gpio_init
     let p = rp2040::Peripherals::take().unwrap();
 
+    p.RESETS.reset.modify(|r, w| unsafe { w.bits(r.bits()) }.pads_bank0().clear_bit().io_bank0().clear_bit() );
+
+    loop {
+        let r = p.RESETS.reset_done.read();
+        if r.pads_bank0().bit() && r.io_bank0().bit() {
+            break;
+        }
+    }
+
     p.SIO.gpio_oe_clr.write(|w| unsafe { w.bits(1<<pin) } );
     p.SIO.gpio_out_clr.write(|w| unsafe { w.bits(1<<pin) } );
 
