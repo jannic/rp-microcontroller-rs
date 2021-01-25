@@ -5,8 +5,7 @@ This is a board support package for the
 
 ## Current state / TODO
 
-For now, a simple blinky example can be compiled.
-It is completely untested, as I do not yet have access to the hardware.
+For now, a simple blinky example can be compiled, and runs!
 
 ## Usage
 
@@ -15,6 +14,30 @@ An example blinking a LED can be compiled with:
 ``` sh
 cargo build --target thumbv6m-none-eabi --example=blink  --release
 ```
+
+To flash the program, you must convert the ELF executable to a UF2 image.
+
+Install [`uf2conv`](https://github.com/sajattack/uf2conv-rs) and [`cargo-binutils`](https://github.com/rust-embedded/cargo-binutils):
+``` sh
+cargo install uf2conv cargo-binutils
+```
+
+Convert the ELF executable to a binary image:
+``` sh
+cargo objcopy --example blink --release -- -O binary blink.bin
+```
+
+Convert the binary image to a UF2 format suitable for flashing:
+```
+uf2conv blink.bin --base 0x10000000 --family 0xe48bff56 --output blink.uf2
+```
+
+Flash the new firmware:
+
+* Plug in the RP2040 while holding down the `BOOTSEL` button to put in in flash mode.
+  * It should appear as a USB storage drive on your computer.
+* Copy `blink.uf2` to the drive - it should automatically restart and the LED will blink!
+
 
 ## License
 
