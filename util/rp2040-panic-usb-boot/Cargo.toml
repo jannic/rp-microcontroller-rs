@@ -1,0 +1,20 @@
+[package]
+name = "rp2040-panic-usb-boot"
+version = "0.1.0"
+authors = ["Jan Niehusmann <jan@gondor.com>"]
+license = "MIT OR Apache-2.0"
+edition = "2018"
+description = "On panic, boot to USB mode implmented in ROM"
+readme = "README.md"
+repository = "https://github.com/jannic/rp-microcontroller-rs/"
+homepage = "https://github.com/jannic/rp-microcontroller-rs/"
+
+[dependencies]
+cortex-m = "0.7.1"
+bare-io = "0.2.1"
+
+[dependencies.rp-hal]
+version = "0.0.1"
+default-features = false
+features = ["2040"]
+
