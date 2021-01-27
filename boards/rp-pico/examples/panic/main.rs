@@ -58,10 +58,11 @@ fn main() -> ! {
     p.SIO.gpio_oe_set.write(|w| unsafe { w.bits(1 << pin) });
     p.SIO.gpio_out_set.write(|w| unsafe { w.bits(1 << pin) });
 
-    loop {
+    for _ in 1..10 {
         p.SIO.gpio_out_set.write(|w| unsafe { w.bits(1 << pin) });
         cortex_m::asm::delay(2000000);
         p.SIO.gpio_out_clr.write(|w| unsafe { w.bits(1 << pin) });
         cortex_m::asm::delay(2000000);
     }
+    panic!("Something went wrong!");
 }
