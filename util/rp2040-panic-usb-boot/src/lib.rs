@@ -20,6 +20,20 @@ fn panic(info: &PanicInfo) -> ! {
     let mut cur = Cursor::new(buf);
     write!(&mut cur, "{}\n\0", info).ok();
 
+    // For usb_boot to work, XOSC needs to be running
+    if !(p.XOSC.status.read().stable().bit()) {
+        p.XOSC.startup.write(|w| unsafe {
+            w.delay().bits((12_000 /*kHz*/ + 128) / 256)
+        });
+        p.XOSC.ctrl.write(|w| {
+            w.freq_range()
+                .variant(rp2040::xosc::ctrl::FREQ_RANGE_A::_1_15MHZ)
+                .enable()
+                .variant(rp2040::xosc::ctrl::ENABLE_A::ENABLE)
+        });
+        while !(p.XOSC.status.read().stable().bit()) {}
+    }
+
     // jump to usb
     reset_usb_boot(0,0);
     loop {}
