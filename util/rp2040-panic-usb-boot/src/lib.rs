@@ -13,8 +13,10 @@ fn panic(info: &PanicInfo) -> ! {
     cortex_m::interrupt::disable();
     let p = unsafe { rp2040::Peripherals::steal() };
     // disable XIP cache so cache ram becomes usable
-    p.XIP_CTRL.ctrl.write(|w| w.power_down().clear_bit().en().clear_bit());
-    
+    p.XIP_CTRL
+        .ctrl
+        .write(|w| w.power_down().clear_bit().en().clear_bit());
+
     // write panic message to XIP RAM
     let buf: &mut [u8] = unsafe { core::slice::from_raw_parts_mut(0x15000000 as *mut u8, 0x4000) };
     let mut cur = Cursor::new(buf);
@@ -35,7 +37,7 @@ fn panic(info: &PanicInfo) -> ! {
     }
 
     // jump to usb
-    reset_usb_boot(0,0);
+    reset_usb_boot(0, 0);
     loop {}
 }
 
@@ -50,10 +52,9 @@ unsafe fn rom_func_lookup(code: u32) -> u32 {
 }
 
 fn rom_hword_as_ptr(rom_address: *const u16) -> *const u32 {
-    let ptr:u16 = unsafe { *rom_address };
+    let ptr: u16 = unsafe { *rom_address };
     ptr as *const u32
 }
-
 
 fn reset_usb_boot(usb_activity_gpio_pin_mask: u32, disable_interface_mask: u32) {
     #[allow(non_camel_case_types)]
@@ -68,5 +69,5 @@ fn reset_usb_boot(usb_activity_gpio_pin_mask: u32, disable_interface_mask: u32) 
 
 // #define rom_table_code(c1, c2) ((c1) | ((c2) << 8))
 fn rom_table_code(c1: u8, c2: u8) -> u32 {
-    c1 as u32 | ( (c2 as u32) << 8 )
+    c1 as u32 | ((c2 as u32) << 8)
 }
