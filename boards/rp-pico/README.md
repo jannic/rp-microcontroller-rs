@@ -7,6 +7,15 @@ This is a board support package for the
 
 For now, a simple blinky example can be compiled, and runs!
 
+## Prerequisites
+
+The Rasperry Pi Pico contains a microcontroller using the Arm architecture. To
+cross-compile for that architecture, the matching target needs to be installed:
+
+```
+rustup target add thumbv6m-none-eabi
+```
+
 ## Usage
 
 An example blinking a LED can be compiled with:
