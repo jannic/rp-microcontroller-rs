@@ -41,5 +41,3 @@ version = "0.0.1"
 default-features = false
 features = ["2040"]
 
-[build-dependencies]
-cc = { version = "1.0", features = ["parallel"] }
