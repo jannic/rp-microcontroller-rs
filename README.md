@@ -5,6 +5,15 @@ abstraction layers (HAL) and board support packages for the
 RP2040 and related microcontroller and boards using it, like the
 [Raspberry Pi Pico](https://www.raspberrypi.org/products/raspberry-pi-pico/).
 
+## Prerequisites
+
+The Rasperry Pi Pico contains a microcontroller using the Arm architecture. To
+cross-compile for that architecture, the matching target needs to be installed:
+
+```
+rustup target add thumbv6m-none-eabi
+```
+
 ## Repository structure
 
 The structure is modelled after the repository for
