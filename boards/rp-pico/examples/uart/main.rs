@@ -47,8 +47,7 @@ fn uart_set_format(p:&rp2040::Peripherals, data_bits:u8, stop_bit:u8)
             .stp2().bit(stop_bit -1 == 1)
             .pen().bit(false)
             .eps().bit(false)
-            .fen().bit(true)
-         }
+        }
     });
 }
 
@@ -101,13 +100,37 @@ fn uart0_init(p:&rp2040::Peripherals , baudrate:u32) -> u32 {
             .txe().bit(true)
     });
     // Enable FIFOs
-//    p.UART0.uartlcr_h.write(|w|{
-//        w.fen().bit(true)
-//    });
+    p.UART0.uartlcr_h.modify(|r, w,|{
+        unsafe { w.bits(r.bits()) }
+            .fen().set_bit()
+           
+    });
+
     // Always enable DREQ signals -- no harm in this if DMA is not listening
     //  uart_get_hw(uart)->dmacr = UART_UARTDMACR_TXDMAE_BITS | UART_UARTDMACR_RXDMAE_BITS;
 
     return baud;
+}
+
+
+fn uart_is_writable(p:&rp2040::Peripherals) -> bool{
+    let r = p.UART0.uartfr.read();
+
+    return !r.txff().bit();
+}
+
+
+fn uart_write_blocking(p:&rp2040::Peripherals,  src:&[u8]) {
+    for byte in src {
+        loop {
+           if uart_is_writable(&p)
+           {
+               break;
+           }
+        } 
+        p.UART0.uartdr.write(|w| unsafe { w.bits(*byte as u32)});
+        
+    }
 }
 
 
@@ -168,8 +191,9 @@ fn main() -> ! {
         p.SIO.gpio_out_set.write(|w| unsafe { w.bits(1 << pin) });
         cortex_m::asm::delay(2000000);
         p.SIO.gpio_out_clr.write(|w| unsafe { w.bits(1 << pin) });
-        let send_char = 0x55;
-        p.UART0.uartdr.write(|w| unsafe { w.bits(send_char)});
+        let send_char: [u8; 10] = [1,2,3,4,5,6,7,8,9,10];
+        uart_write_blocking(&p, &send_char);
+
         cortex_m::asm::delay(2000000);
 
     }

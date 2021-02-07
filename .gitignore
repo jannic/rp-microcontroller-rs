@@ -1,2 +1,6 @@
 target
 Cargo.lock
+boards/rp-pico/blink.bin
+boards/rp-pico/blink.uf2
+boards/rp-pico/uart.bin
+boards/rp-pico/uart.uf2
