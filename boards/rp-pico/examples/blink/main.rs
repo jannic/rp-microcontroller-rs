@@ -11,7 +11,7 @@ extern crate rp_pico;
 
 #[entry]
 fn main() -> ! {
-    let pin = 25;
+    let toggle_pins = vec![1,25];
     // gpio_init
     let p = rp2040::Peripherals::take().unwrap();
 
@@ -30,8 +30,12 @@ fn main() -> ! {
         }
     }
 
-    p.SIO.gpio_oe_clr.write(|w| unsafe { w.bits(1 << pin) });
-    p.SIO.gpio_out_clr.write(|w| unsafe { w.bits(1 << pin) });
+    for pin in toggle_pins
+    {
+        p.SIO.gpio_oe_clr.write(|w| unsafe { w.bits(1 << pin) });
+        p.SIO.gpio_out_clr.write(|w| unsafe { w.bits(1 << pin) });    
+    }
+
 
     // gpio_set_function(gpio, GPIO_FUNC_SIO);
 
@@ -43,25 +47,39 @@ fn main() -> ! {
     // PADS_BANK0_GPIO0_IE_BITS | PADS_BANK0_GPIO0_OD_BITS
     // );
     p.PADS_BANK0
+        .gpio1
+        .write(|w| w.ie().bit(true).od().bit(false));
+
+    p.PADS_BANK0
         .gpio25
         .write(|w| w.ie().bit(true).od().bit(false));
+
 
     // Zero all fields apart from fsel; we want this IO to do what the peripheral tells it.
     // This doesn't affect e.g. pullup/pulldown, as these are in pad controls.
     //iobank0_hw->io[gpio].ctrl = fn << IO_BANK0_GPIO0_CTRL_FUNCSEL_LSB;
 
     // is this possible using parameter 'pin'?
+    p.IO_BANK0.gpio1_ctrl.write(|w| w.funcsel().sio_1());
     p.IO_BANK0.gpio25_ctrl.write(|w| w.funcsel().sio_25());
 
     // gpio_set_dir(LED_PIN, GPIO_OUT);
 
-    p.SIO.gpio_oe_set.write(|w| unsafe { w.bits(1 << pin) });
-    p.SIO.gpio_out_set.write(|w| unsafe { w.bits(1 << pin) });
+    for pin in toggle_pins
+    {
+        p.SIO.gpio_oe_set.write(|w| unsafe { w.bits(1 << pin) });
+        p.SIO.gpio_out_set.write(|w| unsafe { w.bits(1 << pin) });    
+    }
 
     loop {
-        p.SIO.gpio_out_set.write(|w| unsafe { w.bits(1 << pin) });
-        cortex_m::asm::delay(2000000);
-        p.SIO.gpio_out_clr.write(|w| unsafe { w.bits(1 << pin) });
-        cortex_m::asm::delay(2000000);
+
+        for pin in toggle_pins
+        {
+            p.SIO.gpio_out_set.write(|w| unsafe { w.bits(1 << pin) });
+            cortex_m::asm::delay(2000000);
+            p.SIO.gpio_out_clr.write(|w| unsafe { w.bits(1 << pin) });
+            cortex_m::asm::delay(2000000);
+        }
+    
     }
 }
