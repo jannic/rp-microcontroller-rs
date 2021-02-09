@@ -1,3 +1,19 @@
+/*
+* Uart example in rust for raspberry pico
+*
+* Simple example to enable blocking write on uart0 
+* (GP0)
+*
+* Copyright (c) Siemens AG, 2021
+*
+* Authors:
+*  Dominik Tacke <dominik.tacke@siemens.com>
+*
+* This work is licensed under the terms of the MIT.  See
+* the LICENSE-MIT file in the top-level directory.
+*/
+ 
+
 #![no_main]
 #![no_std]
 
