@@ -1,6 +1,6 @@
 # On chip debugging
 
-Using on chip debugging will make development much easier.
+This document guides you through the steps necessary to set up on chip debugging on your system.
 
 This document will firstly cover on how to establish the SWD (serial wire debugging) connection as well as configuring VS Code to debug right from your IDE
 
@@ -31,7 +31,7 @@ $ make -j4
 $ sudo make install
 ``` 
 
-If you now change into the `tcl`  directory in the cloned `openocd` and run:
+To check your installation run:
 ```sh
 openocd -f interface/jlink.cfg -c "transport select swd" -c "adapter speed 1000" -f target/rp2040.cfg
 ```
@@ -67,3 +67,82 @@ Info : Listening on port 3333 for gdb connections
 ```
 
 ## Set up VSCode
+
+In order to use the gdb commands correctly you need to install gdb-multiarch:
+
+```sh
+sudo apt install gdb-multiarch
+```
+
+In vscode you need to install at least `marus25.cortex-debug`.
+
+For RUST development you should have the `rust-anaylzer` installed as well.
+
+
+### Workspace 
+
+Either use the workspace provided in the `ide` folder or create your own workspace.
+
+
+In oder to create your own workspace follow the steps bellow:
+
+Open vscode and add boards/rp-pico to the workspace
+
+Setup your launch.json and define the following content to debug the uart example:
+
+
+```json
+{
+				"name": "Debug example 'uart'",
+				"type": "cortex-debug",
+				"request": "launch",
+				"cwd": "${workspaceFolder}",
+				"executable": "${workspaceFolder}/target/thumbv6m-none-eabi/debug/examples/uart",
+				"servertype": "openocd",
+				"gdbPath": "gdb-multiarch",
+				"device": "RP2040",
+				"configFiles": [
+					"interface/jlink.cfg",
+					"${workspaceFolder}/openocd_cfg/jlink_addon.cfg",
+					"target/rp2040.cfg"
+				],
+				"svdFile": "${workspaceFolder}/../../svd/rp2040.svd",
+				"runToMain": true,
+				"postRestartCommands": [
+					"break main",
+					"continue"
+				]
+			},
+```
+
+
+> Remark:    
+> The `jlink_addon.cfg` is a workaround to put in the swd selection and setting of the adapter speed. These commands need to happen after `jlink.cfg` and before `rp2040.cfg`
+
+> Disclaimer:    
+> The launch.json setting have been derived from [Getting started with pico](https://datasheets.raspberrypi.org/pico/getting-started-with-pico.pdf)
+
+
+To use another probe, just change the entry "configFiles" from the launch.json. For example for picoprobe:
+
+```json
+	"configFiles": [
+		 "interface/picoprobe.cfg",
+		"target/rp2040.cfg"
+	],
+```
+
+
+## Debug your code
+
+Open the previously defined workspace in vscode and open the _Run_ view by clicking on the symbol or by Ctrl+Shift+D.
+Choose your debug config from the drop down and start debugging.
+On start and restart you will stop at the `#[entry]`. From there you can start debugging.
+
+
+## Known issues
+
+- [ ] Step over/into is very slow
+- [ ] If you use rust-analyzer clicking on the _Debug_ right above the main function will not work ("workspace not accessible")
+- [ ] `cargo build --target thumbv6m-none-eabi --example=uart` needs still to be run from the terminal. 
+- [ ] Not yet tested on MAC and windows
