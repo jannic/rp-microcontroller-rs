@@ -58,6 +58,9 @@ cargo install form
 sh generate.sh
 ```
 
+
+On how to setup on chip debugging please check out [ON-CHIP_DEBUGGING.md](ON-CHIP_DEBUGGING.md)
+
 ## License
 
 The register definition file `rp2040.svd` was downloaded from the
