@@ -1,0 +1,33 @@
+{
+	"folders": [
+		{
+			"path": "../boards/rp-pico"
+		}
+	],
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "Debug example 'uart'",
+				"type": "cortex-debug",
+				"request": "launch",
+				"cwd": "${workspaceFolder}",
+				"executable": "${workspaceFolder}/target/thumbv6m-none-eabi/debug/examples/uart",
+				"servertype": "openocd",
+				"gdbPath": "gdb-multiarch",
+				"device": "RP2040",
+				"configFiles": [
+					"interface/jlink.cfg",
+					"${workspaceFolder}/openocd_cfg/jlink_addon.cfg",
+					"target/rp2040.cfg"
+				],
+				"svdFile": "${workspaceFolder}/../../svd/rp2040.svd",
+				"runToMain": true,
+				"postRestartCommands": [
+					"break main",
+					"continue"
+				]
+			},
+		]
+	}
+}
