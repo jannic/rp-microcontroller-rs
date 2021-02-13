@@ -72,24 +72,6 @@ SECTIONS
     . = ALIGN(256);
   } >FLASH
 
-  __boot2_end = .;
-
-  PROVIDE(_stext = ADDR(.boot2) + SIZEOF(.boot2) );
-
-  /* ### .text */
-  .text _stext :
-  {
-    /* place these 2 close to each other or the `b` instruction will fail to link */
-    *(.PreResetTrampoline);
-    *(.Reset);
-
-    *(.text .text.*);
-    *(.HardFaultTrampoline);
-    *(.HardFault.*);
-    . = ALIGN(4);
-    __etext = .;
-  } > FLASH
-
   /* ### Vector table */
   .vector_table :
   {
@@ -106,13 +88,26 @@ SECTIONS
 
     /* Device specific interrupts */
     KEEP(*(.vector_table.interrupts)); /* this is the `__INTERRUPTS` symbol */
+  } > FLASH
 
+  PROVIDE(_stext = ADDR(.vector_table) + SIZEOF(.vector_table));
+
+  /* ### .text */
+  .text _stext :
+  {
+    /* place these 2 close to each other or the `b` instruction will fail to link */
+    *(.PreResetTrampoline);
+    *(.Reset);
+
+    *(.text .text.*);
+    *(.HardFaultTrampoline);
+    *(.HardFault.*);
     . = ALIGN(4);
-    __evector_table = .;
+    __etext = .;
   } > FLASH
 
   /* ### .rodata */
-  .rodata __evector_table : ALIGN(4)
+  .rodata __etext : ALIGN(4)
   {
     *(.rodata .rodata.*);
 
@@ -215,11 +210,9 @@ may be enabling it)
 - Supply the interrupt handlers yourself. Check the documentation for details.");
 
 /* ## .text */
-/*
 ASSERT(ADDR(.vector_table) + SIZEOF(.vector_table) <= _stext, "
 ERROR(cortex-m-rt): The .text section can't be placed inside the .vector_table section
 Set _stext to an address greater than the end of .vector_table (See output of `nm`)");
-*/
 
 ASSERT(_stext + SIZEOF(.text) < ORIGIN(FLASH) + LENGTH(FLASH), "
 ERROR(cortex-m-rt): The .text section must be placed inside the FLASH memory.
@@ -232,6 +225,11 @@ Dynamic relocations are not supported. If you are linking to C code compiled usi
 the 'cc' crate then modify your build script to compile the C code _without_
 the -fPIC flag. See the documentation of the `cc::Build.pic` method for details.");
 /* Do not exceed this mark in the error messages above                                    | */
+
+ASSERT(SIZEOF(.vector_table) <= 0x400, "
+There can't be more than 240 interrupt handlers. This may be a bug in
+your device crate, or you may have registered more than 240 interrupt
+handlers.");
 
 ASSERT(SIZEOF(.boot2) == 0x100, "
 ERROR(rp-pico): The stage2 boot loader section .boot2 must be 256 bytes long");
