@@ -25,7 +25,7 @@ use cortex_m_rt::entry;
 
 extern crate rp_pico;
 
-const PERI_CLK: u32 = 5208333; // TODO get real peri clock from registers
+const PERI_CLK: u32 = 12_000_000;
 
 static GREETING: &str = "\n\r/ Hello fellow rustaceans! Now I talk to \\\r
 \\ you from a Raspberry Pico board!       /\r
@@ -136,6 +136,34 @@ fn uart_write_blocking(p: &rp2040::Peripherals, src: &[u8]) {
     }
 }
 
+/*
+* Very simple clock initialization, relying mostly on default values.
+*
+* Enable XOSC and use it as the source for CLK_REF.
+* CLK_SYS defaults to use CLK_REF.
+* CLK_PERI defaults to use CLK_SYS.
+* So those clocks will all be set to XOSC, which is 12MHz on the RP Pico
+*/
+fn clock_init(p: &rp2040::Peripherals) {
+    // enable XOSC if necessary
+    if !(p.XOSC.status.read().stable().bit()) {
+        p.XOSC.startup.write(|w| unsafe {
+            w.delay().bits((12_000 /*kHz*/ + 128) / 256)
+        });
+        p.XOSC.ctrl.write(|w| {
+            w.freq_range()
+                .variant(rp2040::xosc::ctrl::FREQ_RANGE_A::_1_15MHZ)
+                .enable()
+                .variant(rp2040::xosc::ctrl::ENABLE_A::ENABLE)
+        });
+        while !(p.XOSC.status.read().stable().bit()) {}
+    }
+    // switch CLK_REF to XOSC
+    p.CLOCKS
+        .clk_ref_ctrl
+        .write(|w| unsafe { w.src().xosc_clksrc() });
+}
+
 #[entry]
 fn main() -> ! {
     // gpio_init
@@ -155,6 +183,8 @@ fn main() -> ! {
             break;
         }
     }
+
+    clock_init(&p);
 
     uart0_init(&p, 115200);
 
