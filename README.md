@@ -5,6 +5,12 @@ abstraction layers (HAL) and board support packages for the
 RP2040 and related microcontroller and boards using it, like the
 [Raspberry Pi Pico](https://www.raspberrypi.org/products/raspberry-pi-pico/).
 
+## Related projects
+
+There is a similar project called [rp-rs](https://github.com/rp-rs) which
+currently contains more code than this one. As both are under development and
+far away from a stable release, please have a look at both and pick whatever you like.
+
 ## Prerequisites
 
 The Rasperry Pi Pico contains a microcontroller using the Arm architecture. To
