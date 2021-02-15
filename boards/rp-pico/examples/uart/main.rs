@@ -125,6 +125,23 @@ fn uart_is_writable(p: &rp2040::Peripherals) -> bool {
     return !r.txff().bit();
 }
 
+struct Writer<'a> {
+    p: &'a rp2040::Peripherals,
+}
+
+impl <'a>  Writer<'a> {
+    fn new(p: &'a rp2040::Peripherals) -> Self {
+        Self { p }
+    }
+}
+
+impl core::fmt::Write for Writer<'_> {
+    fn write_str(&mut self, s: &str) -> core::fmt::Result {
+        uart_write_blocking(self.p, s.as_bytes());
+        Ok(())
+    }
+}
+
 fn uart_write_blocking(p: &rp2040::Peripherals, src: &[u8]) {
     for byte in src {
         loop {
@@ -189,6 +206,13 @@ fn main() -> ! {
     uart0_init(&p, 115200);
 
     uart_write_blocking(&p, &GREETING.as_bytes());
+
+    use core::fmt::Write;
+    let mut w = Writer::new(&p);
+    write!(&mut w, "copyright_string: {}\n\r", rp_hal::rom_data::copyright_string()).unwrap();
+    write!(&mut w, "git_revision: {:08x}\n\r", rp_hal::rom_data::git_revision()).unwrap();
+
+    rp_hal::rom_data::reset_to_usb_boot(0, 0);
 
     loop {
         // slowly write to terminal
