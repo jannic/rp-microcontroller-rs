@@ -37,37 +37,7 @@ fn panic(info: &PanicInfo) -> ! {
     }
 
     // jump to usb
-    reset_usb_boot(0, 0);
+    rp_hal::rom_data::reset_to_usb_boot(0, 0);
     loop {}
 }
 
-unsafe fn rom_func_lookup(code: u32) -> u32 {
-    #[allow(non_camel_case_types)]
-    type rom_table_lookup_fn = extern "C" fn(*const u16, u32) -> u32;
-
-    let rom_table_lookup_ptr: *const u32 = rom_hword_as_ptr(0x18 as *const u16);
-    let rom_table_lookup: rom_table_lookup_fn = core::mem::transmute(rom_table_lookup_ptr);
-    let func_table = rom_hword_as_ptr(0x14 as *const u16) as *const u16;
-    rom_table_lookup(func_table, code)
-}
-
-fn rom_hword_as_ptr(rom_address: *const u16) -> *const u32 {
-    let ptr: u16 = unsafe { *rom_address };
-    ptr as *const u32
-}
-
-fn reset_usb_boot(usb_activity_gpio_pin_mask: u32, disable_interface_mask: u32) {
-    #[allow(non_camel_case_types)]
-    type reset_usb_boot_fn = extern "C" fn(u32, u32) -> !;
-
-    let ptr = unsafe { rom_func_lookup(rom_table_code(b'U', b'B')) };
-    if ptr as usize != 0 {
-        let func: reset_usb_boot_fn = unsafe { core::mem::transmute(ptr) };
-        func(usb_activity_gpio_pin_mask, disable_interface_mask);
-    }
-}
-
-// #define rom_table_code(c1, c2) ((c1) | ((c2) << 8))
-fn rom_table_code(c1: u8, c2: u8) -> u32 {
-    c1 as u32 | ((c2 as u32) << 8)
-}

@@ -14,7 +14,8 @@ cortex-m = "0.7.1"
 bare-io = "0.2.1"
 
 [dependencies.rp-hal]
-version = "0.0.1"
+version = "0.0.2"
+path = "../../hal/"
 default-features = false
 features = ["2040"]
 

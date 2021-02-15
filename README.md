@@ -77,3 +77,4 @@ under the [BSD-3-Clause License](LICENSE-Raspberry-Pi).
 The rest of this repository is licensed under the terms of both the
 [MIT license](LICENSE-MIT) and the [Apache License (Version 2.0)](LICENSE-APACHE), at your option.
 
+Parts of this code was copied from [rp-rs](https://github.com/rp-rs/), which is published under the same license.
