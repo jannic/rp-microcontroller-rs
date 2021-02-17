@@ -11,6 +11,8 @@
 *
 * This work is licensed under the terms of the MIT.  See
 * the LICENSE-MIT file in the top-level directory.
+* 
+* SPDX-License-Identifier: MIT
 */
 
 #![no_main]
