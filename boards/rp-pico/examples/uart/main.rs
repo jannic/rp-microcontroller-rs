@@ -17,6 +17,8 @@
 #![no_main]
 #![no_std]
 
+use core::ops::Deref;
+
 use rp_hal::target_device as rp2040;
 
 extern crate rp2040_panic_usb_boot;
@@ -24,6 +26,8 @@ extern crate rp2040_panic_usb_boot;
 use cortex_m_rt::entry;
 
 extern crate rp_pico;
+
+mod uart;
 
 const PERI_CLK: u32 = 12_000_000;
 
@@ -190,12 +194,16 @@ fn main() -> ! {
 
     uart_write_blocking(&p, &GREETING.as_bytes());
 
+    let uart0 = uart::UART::new(p.UART0);
+    let uart1 = uart::UART::new(p.UART1);
+
+
     loop {
         // slowly write to terminal
         for char in "Still vibing....\r\n".as_bytes() {
             cortex_m::asm::delay(1000000);
 
-            uart_write_blocking(&p, &[*char]);
+           // uart_write_blocking(&p, &[*char]);
         }
     }
 }
