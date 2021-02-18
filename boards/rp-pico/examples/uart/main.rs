@@ -1,8 +1,10 @@
 /*
 * Uart example in rust for raspberry pico
 *
-* Simple example to enable blocking write on uart0
-* (GP0)
+* Simple example to enable blocking write on both
+* UART lines.
+* UART0_TX is on GP0
+* UART1_TX is on GP1
 *
 * Copyright (c) Siemens AG, 2021
 *
