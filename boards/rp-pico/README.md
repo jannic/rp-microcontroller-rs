@@ -26,9 +26,10 @@ cargo build --target thumbv6m-none-eabi --example=blink  --release
 
 To flash the program, you must convert the ELF executable to a UF2 image.
 
-Install [`uf2conv`](https://github.com/sajattack/uf2conv-rs) and [`cargo-binutils`](https://github.com/rust-embedded/cargo-binutils):
+Install [`uf2conv`](https://github.com/sajattack/uf2conv-rs) and [`cargo-binutils`](https://github.com/rust-embedded/cargo-binutils) as well as the `llvm-tools-preview` component :
 ``` sh
 cargo install uf2conv cargo-binutils
+rustup component add llvm-tools-preview
 ```
 
 Convert the ELF executable to a binary image:
