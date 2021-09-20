@@ -7,9 +7,11 @@ RP2040 and related microcontroller and boards using it, like the
 
 ## Related projects
 
-There is a similar project called [rp-rs](https://github.com/rp-rs) which
-currently contains more code than this one. As both are under development and
-far away from a stable release, please have a look at both and pick whatever you like.
+There is a similar project called [rp-rs](https://github.com/rp-rs)
+which is much more active than this one.
+
+**As [rp-rs](https://github.com/rp-rs) is in a more usable state, most
+people should prefer that one, currently.**
 
 ## Prerequisites
 
