@@ -5,7 +5,7 @@ Ltd](https://www.raspberrypi.com/documentation/microcontrollers/rp2040.html#soft
 only support C, C++ and python, it is also possible to develop a firmware
 using your favourite language, Rust.
 
-As the RP2040 is based on a popular architecture, ARM Cortex-M, a many
+As the RP2040 is based on a popular architecture, ARM Cortex-M, many
 drivers and other supporting infrastructure from the general [Embedded
 Rust](https://github.com/rust-embedded/awesome-embedded-rust/blob/master/README.md)
 ecosystem can be used.
@@ -40,7 +40,9 @@ to develop for the RP2040.
 
 ### Software
 
-
+To write a firmware using the integrated USB boot loader, the binary file must be converted to UF2 format. This can
+be accomplished using the [elf2uf2 tool](https://github.com/raspberrypi/pico-sdk/tree/master/tools/elf2uf2) from the C SDK,
+or the rust port, [elf2uf2-rs](https://crates.io/crates/elf2uf2-rs).
 
 ## License
 
