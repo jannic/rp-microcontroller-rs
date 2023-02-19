@@ -40,9 +40,27 @@ to develop for the RP2040.
 
 ### Software
 
-To write a firmware using the integrated USB boot loader, the binary file must be converted to UF2 format. This can
+For building rust binaries for the rp2040, you need to install the rustc target `thumbv6m-none-eabi`:
+```
+rustup target add thumbv6m-none-eabi
+```
+
+To upload a firmware using the integrated USB boot loader, the binary file must be converted to UF2 format. This can
 be accomplished using the [elf2uf2 tool](https://github.com/raspberrypi/pico-sdk/tree/master/tools/elf2uf2) from the C SDK,
 or the rust port, [elf2uf2-rs](https://crates.io/crates/elf2uf2-rs).
+
+This conversion is not needed when using a debug probe for firmware upload.
+Instead, you need some software to talk to the debug probe. One good tool for
+that is [probe-run](https://github.com/knurling-rs/probe-run).
+
+## Getting started
+
+A good place to start is the [rp2040-project-template](https://github.com/rp-rs/rp2040-project-template). It contains a
+simple firmware which just blinks a LED, wrapped in all the usual tooling.
+
+## Getting help
+
+If you have questions, need help, or want to share your creations, join us Matrix: [#rp-rs:matrix.org](https://matrix.to/#/#rp-rs:matrix.org).
 
 ## License
 
@@ -55,3 +73,5 @@ The rest of this repository is licensed under the terms of both the
 [MIT license](LICENSE-MIT) and the [Apache License (Version 2.0)](LICENSE-APACHE), at your option.
 
 Parts of this code was copied from [rp-rs](https://github.com/rp-rs/), which is published under the same license.
+
+(Code in this repo has been superseeded by better alternatives. It will be removed in the future.)
