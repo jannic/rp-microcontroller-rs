@@ -1,4 +1,4 @@
-# `Rust support for RP2040 microcontrollers`
+# Rust support for RP2040 microcontrollers
 
 While the [official SDKs by Raspberry Pi
 Ltd](https://www.raspberrypi.com/documentation/microcontrollers/rp2040.html#software-development)
