@@ -52,6 +52,7 @@ or the rust port, [elf2uf2-rs](https://crates.io/crates/elf2uf2-rs).
 This conversion is not needed when using a debug probe for firmware upload.
 Instead, you need some software to talk to the debug probe. One good tool for
 that is [probe-run](https://github.com/knurling-rs/probe-run).
+An alternative is [probe-rs-cli](https://github.com/probe-rs/probe-rs/tree/master/cli).
 
 ## Getting started
 
