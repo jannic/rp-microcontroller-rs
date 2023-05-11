@@ -65,14 +65,5 @@ If you have questions, need help, or want to share your creations, join us Matri
 
 ## License
 
-The register definition file `rp2040.svd` was downloaded from the
-[raspberrypi/pico-sdk repo](https://raw.githubusercontent.com/raspberrypi/pico-sdk/26653ea81e340cacee55025d110c3e014a252a87/src/rp2040/hardware_regs/rp2040.svd).
-It is Copyright 2020 (c) 2020 Raspberry Pi (Trading) Ltd. and is licensed
-under the [BSD-3-Clause License](LICENSE-Raspberry-Pi).
+Licensed under the terms of both the [MIT license](LICENSE-MIT) and the [Apache License (Version 2.0)](LICENSE-APACHE), at your option.
 
-The rest of this repository is licensed under the terms of both the
-[MIT license](LICENSE-MIT) and the [Apache License (Version 2.0)](LICENSE-APACHE), at your option.
-
-Parts of this code was copied from [rp-rs](https://github.com/rp-rs/), which is published under the same license.
-
-(Code in this repo has been superseeded by better alternatives. It will be removed in the future.)
